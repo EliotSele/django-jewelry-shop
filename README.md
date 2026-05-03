@@ -1,30 +1,6 @@
-\# Jewelry Shop E-Commerce
+Jewelry Shop E-Commerce (Django Back-End Project)
 
-
-
-This is a Django back-end project for a jewelry e-commerce platform.
-
-
-
-\## Key Features
-
-
-
-\- \*\*User Authentication:\*\* Registration, login, and logout functionalities.
-
-\- \*\*Product Display:\*\* Multiple images per product and detailed product pages.
-
-\- \*\*Filtering and Search:\*\* Filter products by category and material, plus search for specific products.
-
-\- \*\*Shopping Cart:\*\* Supports both logged-in and guest users (no account needed).
-
-
-
-\## Technologies Used
-
-
-
-\- Django
-
-\- SQLite (for development)
-
+- User Authentication such as Registration, Login and Logout 
+- Detailed product pages with support for multiple images per product.
+- Filtering by category and material, Plus searching for a specific product 
+- Add to Cart that supports both Logged-In and Guest users (no account needed) 
