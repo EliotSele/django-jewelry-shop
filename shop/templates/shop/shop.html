@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}Elliot Jewelry | Shop{% endblock %}
+
+{% block amado_nav %}
+            <!-- Amado Nav -->
+            <nav class="amado-nav">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li class="active"><a href="{% url 'shop' %}">Shop</a></li>
+                    <li><a href="{% url 'cart' %}">Cart</a></li>
+                    <li><a href="{% url 'checkout' %}">Checkout</a></li>
+                </ul>
+            </nav>
+{% endblock amado_nav %}
+
+{% block content %}
+
+        <div class="shop_sidebar_area">
+
+            <!-- ##### Single Widget ##### -->
+            <div class="widget catagory mb-50">
+                <!-- Widget Title -->
+                <h6 class="widget-title mb-30">Catagories</h6>
+
+                <!--  Catagories  -->
+                <div class="catagories-menu">
+                    <ul>
+                        {% for category in categories %}
+                            <li {% if request.GET.category|add:"0" == category.id %}class="active"{% endif %}>
+                                <a href="?category={{ category.id }}">{{ category.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="widget materials mb-50">
+                <!-- Widget Title -->
+                <h6 class="widget-title mb-30">Materials</h6>
+
+                <div class="widget-desc">
+                    <!-- Dynamic materials -->
+                    {% for material in materials %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" 
+                                value="{{ material.id }}" 
+                                id="material_{{ material.id }}"
+                                name="material"
+                                {% if material.id|stringformat:"s" in request.GET.material %}checked{% endif %}>
+                            <label class="form-check-label" for="material_{{ material.id }}">{{ material.name }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+            <!-- Clear Filters button-->
+            <div class="widget clear-filters mb-50">
+                <a href="?{% if search_query %}search={{ search_query }}{% endif %}" 
+                class="btn amado-btn w-100">
+                    Clear Filters
+                </a>
+            </div>
+
+            
+            <!-- ##### Single Widget ##### -->
+            <div class="widget price mb-50">
+                <!-- Widget Title -->
+                <h6 class="widget-title mb-30">Price</h6>
+
+                <div class="widget-desc">
+                    <div class="slider-range">
+                        <div data-min="{{ min_price }}" data-max="{{ max_price }}" data-unit="$" class="slider-range-price ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" data-value-min="{{ min_price }}" data-value-max="{{ max_price }}" data-label-result="">
+                            <div class="ui-slider-range ui-widget-header ui-corner-all"></div>
+                            <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span>
+                            <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span>
+                        </div>
+                        <div class="range-price">${{ min_price }} - ${{ max_price }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="amado_product_area section-padding-100">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="product-topbar d-xl-flex align-items-end justify-content-between">
+                            <!-- Total Products -->
+                            <div class="total-products">
+                                <p>Showing {{ products|length }} products</p>
+                                <div class="view d-flex">
+                                    <a href="#"><i class="fa fa-th-large" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-bars" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                            {% comment %} <!-- Sorting -->
+                            <div class="product-sorting d-flex">
+                                <div class="sort-by-date d-flex align-items-center mr-15">
+                                    <p>Sort by</p>
+                                    <form action="#" method="get">
+                                        <select name="select" id="sortBydate">
+                                            <option value="value">Date</option>
+                                            <option value="value">Newest</option>
+                                            <option value="value">Popular</option>
+                                        </select>
+                                    </form>
+                                </div>
+                                <div class="view-product d-flex align-items-center">
+                                    <p>View</p>
+                                    <form action="#" method="get">
+                                        <select name="select" id="viewProduct">
+                                            <option value="value">12</option>
+                                            <option value="value">24</option>
+                                            <option value="value">48</option>
+                                            <option value="value">96</option>
+                                        </select>
+                                    </form>
+                                </div>
+                            </div> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Dynamic Product Loop -->
+                    {% for product in products %}
+                    <div class="col-12 col-sm-6 col-md-12 col-xl-6">
+                        <div class="single-product-wrapper">
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                {% if product.productimage_set.all %}
+                                <a href="{% url 'product_details' product.id %}">
+                                    <img src="{{ product.productimage_set.first.image.url }}" alt="{{ product.name }}">
+                                    <!-- Hover Thumb -->
+                                    <img class="hover-img" src="{{ product.productimage_set.first.image.url }}" alt="{{ product.name }}">
+                                </a>
+                                {% endif %}
+                            </div>
+
+                            <!-- Product Description -->
+                            <div class="product-description d-flex align-items-center justify-content-between">
+                                <!-- Product Meta Data -->
+                                <div class="product-meta-data">
+                                    <div class="line"></div>
+                                    <p class="product-price">${{ product.price }}</p>
+                                    <a href="{% url 'product_details' product.id %}">
+                                        <h6>{{ product.name }}</h6>
+                                    </a>
+                                </div>
+                                <!-- Ratings & Cart -->
+                                <div class="ratings-cart text-right">
+                                    <div class="ratings">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </div>
+                                    {% comment %} <div class="cart">
+                                        <a href="{% url 'cart' %}" data-toggle="tooltip" data-placement="left" title="Add to Cart"><img src="{% static 'img/core-img/cart.png' %}" alt="Add to Cart"></a>
+                                    </div> {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Pagination -->
+                        <nav aria-label="navigation">
+                            <ul class="pagination justify-content-end mt-50">
+                                {% if products.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1">First</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+                                    </li>
+                                {% endif %}
+                                
+                                {% for num in products.paginator.page_range %}
+                                    {% if num == products.number %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="#">{{ num }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if products.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ products.paginator.num_pages }}">Last</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock content %}
+
+{% block footer_menu %}
+                        <!-- Footer Menu -->
+                        <div class="footer_menu">
+                            <nav class="navbar navbar-expand-lg justify-content-end">
+                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#footerNavContent" aria-controls="footerNavContent" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+                                <div class="collapse navbar-collapse" id="footerNavContent">
+                                    <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{% url 'home' %}">Home</a>
+                                        </li>
+                                        <li class="nav-item active">
+                                            <a class="nav-link" href="{% url 'shop' %}">Shop</a>
+                                        </li>
+                                        {% comment %} <li class="nav-item">
+                                            <a class="nav-link" href="{% url 'product_details' %}">Product</a>
+                                        </li> {% endcomment %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{% url 'cart' %}">Cart</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{% url 'checkout' %}">Checkout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+{% endblock footer_menu %}
+
+
+{% block extra_js %}
+    <script>
+    // Handle material checkbox changes
+    document.addEventListener("DOMContentLoaded", function() {
+        const materialCheckboxes = document.querySelectorAll('input[name="material"]');
+        
+        // Add event listeners to checkboxes
+        materialCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                updateFilter();
+            });
+        });
+
+        // Handle category links
+        const categoryLinks = document.querySelectorAll('.catagories-menu a');
+        categoryLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = new URL(this.href);
+                updateFilter(url.searchParams);
+            });
+        });
+    });
+
+    // Function to update the filter
+    function updateFilter(params) {
+        // Get current URL parameters
+        const currentUrl = new URL(window.location.href);
+        
+        // Build new query string
+        let newParams = new URLSearchParams(currentUrl.search);
+        
+        if (params) {
+            // Update with new params from category links
+            for (let [key, value] of params.entries()) {
+                newParams.set(key, value);
+            }
+        } else {
+            // Handle material checkboxes
+            const selectedMaterials = [];
+            document.querySelectorAll('input[name="material"]:checked').forEach(checkbox => {
+                selectedMaterials.push(checkbox.value);
+            });
+            
+            if (selectedMaterials.length > 0) {
+                newParams.set('material', selectedMaterials.join(','));
+            } else {
+                newParams.delete('material');
+            }
+        }
+        
+        // Update URL and reload page
+        window.location.search = newParams.toString();
+    }
+
+    // Handle price filtering - this would need to be implemented with the actual slider functionality
+    </script>
+{% endblock extra_js %}

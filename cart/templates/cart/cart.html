@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}Elliot Jewelry | Cart{% endblock %}
+
+{% block amado_nav %}
+            <!-- Amado Nav -->
+            <nav class="amado-nav">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'shop' %}">Shop</a></li>
+                    <li class="active"><a href="{% url 'cart' %}">Cart</a></li>
+                    <li><a href="{% url 'checkout' %}">Checkout</a></li>
+                </ul>
+            </nav>
+{% endblock amado_nav %}
+
+{% block content %}
+        <div class="cart-table-area section-padding-90">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 col-lg-8">
+                        <div class="cart-title mt-50">
+                            <h4>Shopping Cart</h4>
+                        </div>
+
+                        <div class="cart-table clearfix">
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in cart_items %}
+                                    <tr>
+                                        <td class="cart_product_img">
+                                            {% if item.product.productimage_set.all %}
+                                                <a href="#"><img src="{{ item.product.productimage_set.all.0.image.url }}" alt="Product" style="width: 80px; height: auto;"></a>
+                                            {% else %}
+                                                <a href="#"><img src="{% static 'img/core-img/product-placeholder.jpg' %}" alt="Product" style="width: 80px; height: auto;"></a>
+                                            {% endif %}
+                                        </td>
+                                        <td class="cart_product_desc">
+                                            <h5>{{ item.product.name }}</h5>
+                                        </td>
+                                        <td class="price">
+                                            <span>${{ item.product.price }}</span>
+                                        </td>
+                                        <td class="qty">
+                                            <div class="qty-btn d-flex">
+                                                <!-- <p>Qty</p> -->
+                                                <div class="quantity">
+                                                    <!-- Auto-update form (no button needed) -->
+                                                    <form method="post" action="{% url 'update_cart' %}" style="display:inline;">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                                                        <input type="number" class="qty-text" name="quantity" min="1" max="300" value="{{ item.quantity }}" style="width: 50px;" onchange="this.form.submit()">
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="price">
+                                            <span>${{ item.item_total|floatformat:2 }}</span>
+                                        </td>
+                                        <td>
+                                            <!-- Remove button with proper POST method -->
+                                            <form method="post" action="{% url 'remove_from_cart' item.product.id %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">
+                                            Your cart is empty.
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <div class="cart-summary">
+                            <h5>Cart Total</h5>
+                            <ul class="summary-table">
+                                <li><span>subtotal:</span> <span>${{ total_price|floatformat:2 }}</span></li>
+                                <li><span>delivery:</span> <span>Free</span></li>
+                                <li><span>total:</span> <span>${{ total_price|floatformat:2 }}</span></li>
+                            </ul>
+                            <div class="cart-btn mt-100">
+                                <a href="{% url 'checkout' %}" class="btn amado-btn w-100">Proceed to Checkout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock content %}
+
+
+
+{% block footer_menu %}
+                        <!-- Footer Menu -->
+                        <div class="footer_menu">
+                            <nav class="navbar navbar-expand-lg justify-content-end">
+                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#footerNavContent" aria-controls="footerNavContent" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+                                <div class="collapse navbar-collapse" id="footerNavContent">
+                                    <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{% url 'home' %}">Home</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{% url 'shop' %}">Shop</a>
+                                        </li>
+                                        <li class="nav-item active">
+                                            <a class="nav-link" href="{% url 'cart' %}">Cart</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{% url 'checkout' %}">Checkout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+{% endblock footer_menu %}

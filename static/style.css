@@ -1,0 +1,87 @@
+    /* ####################################################
+    :: Template Name: Essence - Fashion Ecommerce Template
+    :: Author: Colorlib
+    :: Author URL: https://colorlib.com
+    :: Description: Essence is smart & elegant fashion e-commerce Template. It's suitable for all e-commerce business platform.
+    :: Version: 1.0.0
+    :: Created: April 27, 2018
+    :: Last Updated: May 2, 2018
+    #################################################### */
+
+    /* ---------------------------------------
+    ##### - PLACE YOUR CUSTOM CSS HERE - #####
+    --------------------------------------- */
+
+/* ACCOUNT DROPDOWN */
+
+.account-dropdown {
+    position: relative;
+
+}
+
+.account-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #fff;
+    font-weight: 500;
+}
+
+.account-toggle img {
+    width: 20px;
+    height: 20px;
+}
+
+.account-toggle i {
+    font-size: 12px;
+}
+
+/* Dropdown box */
+.account-menu {
+    position: absolute;
+    top: 35px;
+    left: 0;
+    background: #ffffff;
+    border-radius: 8px;
+    min-width: 180px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    display: none;
+    overflow: hidden;
+    z-index: 999;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Items */
+.account-menu a,
+.account-menu button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    background: none;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+/* Hover effect */
+.account-menu a:hover,
+.account-menu button:hover {
+    background: #f8f9fa;
+}
+
+/* Smooth animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
